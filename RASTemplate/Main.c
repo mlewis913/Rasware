@@ -53,10 +53,7 @@ void gpioLineSensorDemo(void)
 {
     while(!KeyWasPressed())
 	{
-	    Printf("Line Sensor values: %1.3f, %1.3f, %1.3f\r",
-		ADCRead(adc[0]),
-		ADCRead(adc[1]),
-		ADCRead(adc[2]));
+	    Printf("Line Sensor values: %1.3f, %1.3f, %1.3f\r" + ADCRead(adc[0]) + ADCRead(adc[1]) + ADCRead(adc[2]));
 	}
 
     Printf("\n");
@@ -67,10 +64,7 @@ void IRSensorDemo(void)
 {
     while(!KeyWasPressed())
 	{
-	    Printf("Distance Sensor values: %1.3f, %1.3f, %1.3f\r",
-		ADCRead(adc2[0]),
-		ADCRead(adc2[1]),
-		ADCRead(adc2[2]));
+	    Printf("Distance Sensor values: %1.3f, %1.3f, %1.3f\r" + ADCRead(adc2[0]) + ADCRead(adc2[1]) + ADCRead(adc2[2]));
 	}
 
     Printf("\n");
