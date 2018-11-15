@@ -7,7 +7,7 @@
 
 static tMotor *left;
 static tMotor *right;
-static tADC *adc[1];
+static tADC *adc[2];
 static tADC *adc2[1];
 static tBoolean initialized = false;
 
@@ -33,6 +33,7 @@ int main(void)
     left = InitializeServoMotor(PIN_E0, false);
     right = InitializeServoMotor(PIN_D3, true);
     adc[0] = InitializeADC(PIN_E2);
+    adc[1] = InitializeADC(PIN_E3);
     int b1 = ADCRead(adc[0]) * 4096;
 	//line sensor intialization
     adc2[0] = InitializeADC(PIN_E1);
@@ -41,46 +42,33 @@ int main(void)
 
     while(1)
     {
-		if(ADCRead(adc2[0]) * 4096 < 1000) 
-		{
-		SetMotor(left, .75);
-		SetMotor(right, -.75);
-		Wait(.2);
-		}
-		if(ADCRead(adc2[0]) * 4096 < 1000) 
-		{
-		SetMotor(left, -.75);
-		SetMotor(right, .75);
-		Wait(.2);
-		}
-		if(ADCRead(adc2[0]) * 4096 < 1000) 
-		{
-		SetMotor(left, -.75);
-		SetMotor(right, .75);
-		Wait(.2);
-		}
-		if(ADCRead(adc2[0]) * 4096 < 1000) 
-		{
-		SetMotor(left, .75);
-		SetMotor(right, -.75);
-		Wait(.2);
-		}
-	//sweeping detection motion
-		else if(ADCRead(adc2[0]) * 4096 >= 1000) 
-		{
-		SetMotor(left, 1);
-		SetMotor(right, 1);
-		}
-	//charge motion if within about 3 feet
-		if (ADCRead(adc[0]) * 4096 <= 2000)
+		if(ADCRead(adc[0]) * 4096 <= 3000)
 		{
 		SetMotor(left, -1);
 		SetMotor(right, -1);
-                Wait(.35);
+                Wait(.45);
 		SetMotor(left, -1);
 		SetMotor(right, 1);
 		Wait(.85);
-		} 
+		}
+		else if(ADCRead(adc[0]) * 4096 > 3000)
+		{
+			if(ADCRead(adc2[0]) * 4096 < 1900) 
+			{
+			SetMotor(left, .2);
+			SetMotor(right, -.2);
+		//sweeping detection motion
+		//motion incorporated into sweep to help get checkpoint
+			}
+			else if(ADCRead(adc2[0]) * 4096 >= 1900)
+		// previously 1000 but changed it to get checkpoint
+			{
+			Wait(.25);
+			SetMotor(left, .85);
+			SetMotor(right, 1);
+			}
+		//charge motion if within about 3 feet
+		}
 	//motion if reached edge
     }
 
