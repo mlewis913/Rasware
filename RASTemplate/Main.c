@@ -42,7 +42,7 @@ int main(void)
 
 	if(ADCRead(adc2[0]) * 4096 < 1900)
 	{
-	SetMotor(left, .85);
+	SetMotor(left, .75);
 	SetMotor(right, 1);
 	Wait(1);
 	}
@@ -75,13 +75,13 @@ int main(void)
 		//counter motion to help lock onto other robot
 			else if(ADCRead(adc2[0]) * 4096 >= 1850 && ADCRead(adc2[0]) * 4096 <= 3000)
 			{
-			SetMotor(left, .75);
+			SetMotor(left, .65);
 			SetMotor(right, 1);
 			}
 		//intial start of chase code if a wait timer is needed to help lock on but don't need it at the moment 
 			else if(ADCRead(adc2[0]) * 4096 >= 3000)
 			{
-			SetMotor(left, .75);
+			SetMotor(left, .5);
 			SetMotor(right, 1);
 			}
 		//second part of chrge motion with no wait timer so it does not fall off field 
