@@ -40,36 +40,52 @@ int main(void)
     int b2 = ADCRead(adc2[0]) * 4096;
 	//distance sensor intialization
 
+	if(ADCRead(adc2[0]) * 4096 < 1900)
+	{
+	SetMotor(left, .85);
+	SetMotor(right, 1);
+	Wait(1);
+	}
+		//intial motion if no robot in front of us
     while(1)
     {
-		if(ADCRead(adc[0]) * 4096 <= 3000)
+		if(ADCRead(adc[0]) * 4096 <= 2000)
 		{
 		SetMotor(left, -1);
 		SetMotor(right, -1);
-                Wait(.45);
-		SetMotor(left, -1);
-		SetMotor(right, 1);
-		Wait(.85);
+                Wait(.65);
+		SetMotor(left, 1);
+		SetMotor(right, -1);
+		Wait(.65);
 		}
+		//back up motoin if hit white line
 		else if(ADCRead(adc[0]) * 4096 > 3000)
 		{
-			if(ADCRead(adc2[0]) * 4096 < 1900) 
+			if(ADCRead(adc2[0]) * 4096 < 1845) 
 			{
-			SetMotor(left, .2);
-			SetMotor(right, -.2);
-		//sweeping detection motion
-		//motion incorporated into sweep to help get checkpoint
+			SetMotor(left, .3);
+			SetMotor(right, -.3);
+		//turning detection motion
 			}
-			else if(ADCRead(adc2[0]) * 4096 >= 1900)
-		// previously 1000 but changed it to get checkpoint
+			else if(ADCRead(adc2[0]) * 4096 > 1845 && ADCRead(adc2[0]) * 4096 < 1850)
 			{
-			Wait(.25);
-			SetMotor(left, .85);
+			SetMotor(left, -1);
 			SetMotor(right, 1);
 			}
-		//charge motion if within about 3 feet
+		//counter motion to help lock onto other robot
+			else if(ADCRead(adc2[0]) * 4096 >= 1850 && ADCRead(adc2[0]) * 4096 <= 3000)
+			{
+			SetMotor(left, .75);
+			SetMotor(right, 1);
+			}
+		//intial start of chase code if a wait timer is needed to help lock on but don't need it at the moment 
+			else if(ADCRead(adc2[0]) * 4096 >= 3000)
+			{
+			SetMotor(left, .75);
+			SetMotor(right, 1);
+			}
+		//second part of chrge motion with no wait timer so it does not fall off field 
 		}
-	//motion if reached edge
     }
 
 }
